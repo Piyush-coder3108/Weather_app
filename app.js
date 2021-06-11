@@ -38,7 +38,12 @@ function find_temp_logo(temp){
 }
 
 function msToHMS(s) {
-    var now = new Date(s*1000);
+    var currentTime = new Date();
+
+var currentOffset = currentTime.getTimezoneOffset();
+
+var ISTOffset = 330;   // IST offset UTC +5:30 
+    var now = new Date(s*1000+(ISTOffset + currentOffset)*60000);
         let hours = now.getHours();
         let mins = now.getMinutes();
         let periods = "AM";
@@ -69,6 +74,7 @@ app.get('/',(req,res)=>{
         const imageUrl = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
         const sunrisetym= msToHMS(sunrise);
         const sunsettym= msToHMS(sunset);
+        const description=weather.weather[0].description;
         
         res.render('index',{
             city: "Delhi (default)",
@@ -84,7 +90,8 @@ app.get('/',(req,res)=>{
             visibility: visibility,
             image:imageUrl,
             pos: true,
-            temp_logo: find_temp_logo(temp)
+            temp_logo: find_temp_logo(temp),
+            description: description
         })
 
     })
@@ -107,6 +114,7 @@ app.post('/',(req,res)=>{
         const imageUrl = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
         const sunrisetym= msToHMS(sunrise);
         const sunsettym= msToHMS(sunset);
+        const description=weather.weather[0].description;
         res.render('index',{
             city: req.body.city,
             name: name,
@@ -121,7 +129,8 @@ app.post('/',(req,res)=>{
             visibility: visibility,
             image:imageUrl,
             pos: false,
-            temp_logo:find_temp_logo(temp)
+            temp_logo:find_temp_logo(temp),
+            description: description
         })
 
     })
@@ -142,6 +151,7 @@ app.post('/',(req,res)=>{
         const imageUrl = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
         const sunrisetym= msToHMS(sunrise);
         const sunsettym= msToHMS(sunset);
+        const description=weather.weather[0].description;
         res.render('index',{
             city: "Delhi (default)",
             name: name,
@@ -156,7 +166,8 @@ app.post('/',(req,res)=>{
             visibility: visibility,
             image: imageUrl,
             pos: false,
-            temp_logo:find_temp_logo(temp)
+            temp_logo:find_temp_logo(temp),
+            description: description
         });
 
     })
